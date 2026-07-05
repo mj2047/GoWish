@@ -1,0 +1,190 @@
+@import "tailwindcss";
+
+@theme inline {
+  --font-display: var(--font-display-raw), ui-serif, Georgia, serif;
+  --font-sans: var(--font-sans-raw), ui-sans-serif, system-ui, sans-serif;
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+
+  --color-brand-indigo: var(--brand-indigo);
+  --color-brand-purple: var(--brand-purple);
+  --color-brand-pink: var(--brand-pink);
+  --color-brand-teal: var(--brand-teal);
+
+  --color-status-available: var(--status-available);
+  --color-status-claimed: var(--status-claimed);
+  --color-status-expiring: var(--status-expiring);
+  --color-status-given: var(--status-given);
+}
+
+:root {
+  /* Warm, moody dark base with a hint of plum */
+  --background: oklch(0.16 0.03 295);
+  --foreground: oklch(0.97 0.01 90);
+
+  --card: oklch(0.21 0.035 290 / 0.6);
+  --card-foreground: oklch(0.97 0.01 90);
+  --muted: oklch(0.24 0.03 290);
+  --muted-foreground: oklch(0.72 0.02 290);
+  --destructive: oklch(0.65 0.22 25);
+
+  --border: oklch(1 0 0 / 0.09);
+
+  --brand-indigo: oklch(0.58 0.22 275);
+  --brand-purple: oklch(0.62 0.24 310);
+  --brand-pink: oklch(0.72 0.22 350);
+  --brand-teal: oklch(0.75 0.13 190);
+
+  --status-available: oklch(0.78 0.14 165);
+  --status-claimed: oklch(0.7 0.16 290);
+  --status-expiring: oklch(0.82 0.15 75);
+  --status-given: oklch(0.65 0.02 290);
+
+  --gradient-brand: linear-gradient(
+    115deg,
+    var(--brand-indigo),
+    var(--brand-purple) 45%,
+    var(--brand-pink)
+  );
+
+  --shadow-glow: 0 20px 60px -20px color-mix(in oklab, var(--brand-pink) 60%, transparent);
+  --shadow-card: 0 10px 40px -20px oklch(0 0 0 / 0.6);
+}
+
+* {
+  border-color: var(--color-border);
+}
+
+html,
+body {
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+.font-display {
+  font-family: var(--font-display);
+  letter-spacing: -0.02em;
+}
+
+.bg-app {
+  background-color: var(--background);
+  background-image:
+    radial-gradient(
+      60% 40% at 12% 8%,
+      color-mix(in oklab, var(--brand-indigo) 40%, transparent),
+      transparent 70%
+    ),
+    radial-gradient(
+      50% 35% at 88% 18%,
+      color-mix(in oklab, var(--brand-pink) 35%, transparent),
+      transparent 70%
+    ),
+    radial-gradient(
+      45% 40% at 78% 92%,
+      color-mix(in oklab, var(--brand-purple) 35%, transparent),
+      transparent 70%
+    ),
+    radial-gradient(
+      40% 30% at 8% 88%,
+      color-mix(in oklab, var(--brand-teal) 25%, transparent),
+      transparent 70%
+    );
+  background-attachment: fixed;
+}
+
+.text-gradient {
+  background: var(--gradient-brand);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.bg-gradient-brand {
+  background-image: var(--gradient-brand);
+}
+
+.glass {
+  background-color: color-mix(in oklab, var(--card) 70%, transparent);
+  backdrop-filter: blur(18px) saturate(140%);
+  border: 1px solid var(--color-border);
+}
+
+.glass-strong {
+  background-color: color-mix(in oklab, oklch(0.22 0.04 290) 82%, transparent);
+  backdrop-filter: blur(24px) saturate(150%);
+  border: 1px solid var(--color-border);
+}
+
+.card-hover {
+  transition:
+    transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1),
+    box-shadow 0.35s;
+}
+.card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-glow);
+}
+
+.btn-gradient {
+  background-image: var(--gradient-brand);
+  color: white;
+  box-shadow: var(--shadow-glow);
+  transition:
+    transform 0.2s,
+    box-shadow 0.3s,
+    filter 0.3s;
+}
+.btn-gradient:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.08);
+}
+.btn-gradient:active {
+  transform: translateY(0);
+}
+.btn-gradient:disabled {
+  filter: grayscale(0.3) brightness(0.8);
+  transform: none;
+}
+
+.ring-gradient {
+  position: relative;
+}
+.ring-gradient::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+  background: var(--gradient-brand);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+@keyframes drift {
+  0% {
+    transform: translate3d(0, -15vh, 0) rotate(0deg);
+  }
+  100% {
+    transform: translate3d(0, 115vh, 0) rotate(calc(360deg * var(--rotate-dir, 1)));
+  }
+}
+
+.falling-product {
+  animation-name: drift;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}

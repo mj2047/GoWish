@@ -1,0 +1,110 @@
+// Prisma schema for the Gift Wishlist App (V1)
+// SQLite for local dev — swap the datasource provider/url to Postgres for prod.
+// Note: SQLite has no native enum/decimal support in Prisma, so status fields are
+// plain strings validated against shared unions in lib/types.ts, and price is a Float.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id              String   @id @default(cuid())
+  name            String
+  email           String?  @unique
+  phone           String?  @unique
+  passwordHash    String?
+  profilePhotoUrl String?
+  username        String   @unique
+  publicShareSlug String   @unique
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  items         WishlistItem[]
+  claims        Claim[]
+  notifications Notification[]
+  following     Follow[]       @relation("Follower")
+  followers     Follow[]       @relation("Followee")
+}
+
+model WishlistItem {
+  id            String   @id @default(cuid())
+  ownerId       String
+  owner         User     @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  title         String
+  imageUrl      String?
+  price         Float?
+  sourceUrl     String?
+  addedManually Boolean  @default(true)
+  // available | claimed | expiring | given
+  status        String   @default("available")
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  claims        Claim[]
+  notifications Notification[]
+
+  @@index([ownerId])
+}
+
+model Claim {
+  id     String        @id @default(cuid())
+  // Nullable + SetNull so a claim survives its item being deleted mid-claim —
+  // the `cancelled` status is a real history entry, not something to lose.
+  itemId String?
+  item   WishlistItem? @relation(fields: [itemId], references: [id], onDelete: SetNull)
+
+  claimerId String
+  claimer   User   @relation(fields: [claimerId], references: [id], onDelete: Cascade)
+
+  plannedGiveDate DateTime?
+  // active | expiring | released | cancelled | completed
+  status          String    @default("active")
+
+  // reminder-sequence bookkeeping (see lib/claimConfig.ts for the constants driving this)
+  reminderStage      Int       @default(0) // 0 = none sent, 1/2/3 = T-6/T-5/T-4 sent
+  expiringStartedAt  DateTime? // when the 12h countdown to auto-release began
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  notifications Notification[]
+
+  @@index([itemId])
+  @@index([claimerId])
+}
+
+model Follow {
+  id         String   @id @default(cuid())
+  followerId String
+  follower   User     @relation("Follower", fields: [followerId], references: [id], onDelete: Cascade)
+  followeeId String
+  followee   User     @relation("Followee", fields: [followeeId], references: [id], onDelete: Cascade)
+  createdAt  DateTime @default(now())
+
+  @@unique([followerId, followeeId])
+  @@index([followeeId])
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  // item_claimed | claim_reminder | claim_expiring | item_deleted
+  type      String
+  message   String
+  read      Boolean  @default(false)
+
+  relatedItemId  String?
+  relatedItem    WishlistItem? @relation(fields: [relatedItemId], references: [id], onDelete: SetNull)
+  relatedClaimId String?
+  relatedClaim   Claim?        @relation(fields: [relatedClaimId], references: [id], onDelete: SetNull)
+
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+}
