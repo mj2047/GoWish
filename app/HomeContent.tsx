@@ -55,16 +55,19 @@ export function HomeContent({ isLoggedIn }: { isLoggedIn: boolean }) {
         {/* Feature strip */}
         <div className="mx-auto mt-24 grid max-w-4xl gap-4 sm:grid-cols-3">
           <Feature
+            href={isLoggedIn ? "/list" : "/signup"}
             icon={<Lock className="h-5 w-5" />}
             title={t("home.feature1Title")}
             body={t("home.feature1Body")}
           />
           <Feature
+            href={isLoggedIn ? "/list?add=link" : "/signup"}
             icon={<Gift className="h-5 w-5" />}
             title={t("home.feature2Title")}
             body={t("home.feature2Body")}
           />
           <Feature
+            href={isLoggedIn ? "/friends" : "/signup"}
             icon={<Users className="h-5 w-5" />}
             title={t("home.feature3Title")}
             body={t("home.feature3Body")}
@@ -109,21 +112,23 @@ export function HomeContent({ isLoggedIn }: { isLoggedIn: boolean }) {
 }
 
 function Feature({
+  href,
   icon,
   title,
   body,
 }: {
+  href: string;
   icon: React.ReactNode;
   title: string;
   body: string;
 }) {
   return (
-    <div className="glass card-hover rounded-2xl p-5">
+    <Link href={href} className="glass card-hover block rounded-2xl p-5">
       <div className="mb-3 inline-flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-brand text-white">
         {icon}
       </div>
       <div className="font-display text-lg font-bold">{title}</div>
       <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{body}</p>
-    </div>
+    </Link>
   );
 }

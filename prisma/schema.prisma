@@ -1,14 +1,15 @@
 // Prisma schema for the Gift Wishlist App (V1)
-// SQLite for local dev — swap the datasource provider/url to Postgres for prod.
-// Note: SQLite has no native enum/decimal support in Prisma, so status fields are
-// plain strings validated against shared unions in lib/types.ts, and price is a Float.
+// Postgres-backed (e.g. Neon) so it works on serverless hosts like Vercel.
+// Status fields are kept as plain strings (validated against shared unions in
+// lib/types.ts) rather than native enums, since this schema started on SQLite
+// (no enum support there) and there's no need to churn it now that it's stable.
 
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 

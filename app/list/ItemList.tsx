@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { Gift, Plus } from "lucide-react";
 import { useLanguage } from "@/components/LanguageProvider";
 
@@ -31,17 +32,30 @@ function GiftPlaceholder() {
 
 export function ItemList({ initialItems }: { initialItems: OwnerItem[] }) {
   const { t } = useLanguage();
+  const searchParams = useSearchParams();
+  const openToLinkPaste = searchParams.get("add") === "link";
+
   const [items, setItems] = useState(initialItems);
   const [form, setForm] = useState<FormState>(emptyForm);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
-  const [showForm, setShowForm] = useState(false);
+  const [showForm, setShowForm] = useState(openToLinkPaste);
 
   const [linkInput, setLinkInput] = useState("");
   const [fetchingLink, setFetchingLink] = useState(false);
   const [clipNotice, setClipNotice] = useState<string | null>(null);
   const [autoFetched, setAutoFetched] = useState(false);
+  const linkInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (openToLinkPaste) {
+      linkInputRef.current?.focus();
+    }
+    // Only run once on mount — this is just to focus the field when the page
+    // was opened via the "paste a link" shortcut.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   function startEdit(item: OwnerItem) {
     setEditingId(item.id);
@@ -172,6 +186,7 @@ export function ItemList({ initialItems }: { initialItems: OwnerItem[] }) {
               </label>
               <div className="flex gap-2">
                 <input
+                  ref={linkInputRef}
                   className="flex-1 rounded-xl border border-white/10 bg-transparent px-3 py-2 text-sm"
                   placeholder={t("list.linkInputPlaceholder")}
                   value={linkInput}

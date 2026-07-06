@@ -41,6 +41,12 @@ export function NavBar() {
               >
                 {t("nav.profile")}
               </Link>
+              <Link
+                href="/friends"
+                className="rounded-xl px-2.5 py-2 text-muted-foreground transition hover:bg-white/5 hover:text-foreground"
+              >
+                {t("nav.friends")}
+              </Link>
               <button
                 onClick={() => signOut({ callbackUrl: "/" })}
                 className="rounded-xl px-2.5 py-2 text-muted-foreground transition hover:bg-white/5 hover:text-foreground"

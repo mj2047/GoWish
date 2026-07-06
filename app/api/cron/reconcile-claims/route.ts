@@ -1,10 +1,11 @@
 import { NextResponse } from "next/server";
 import { reconcileClaims } from "@/lib/claimLifecycle";
 
-// Call this on a schedule in production (e.g. Vercel Cron every few minutes) so
-// reminders/expiry/auto-release fire on time instead of only when a page happens
-// to be viewed. Protect it with CRON_SECRET so it can't be triggered by anyone else.
-export async function POST(request: Request) {
+// Call this on a schedule in production (Vercel Cron hits this via GET, and
+// automatically sends `Authorization: Bearer $CRON_SECRET` when that env var
+// is set) so reminders/expiry/auto-release fire on time instead of only when
+// a page happens to be viewed.
+async function handle(request: Request) {
   const secret = process.env.CRON_SECRET;
   if (secret) {
     const header = request.headers.get("authorization");
@@ -16,3 +17,6 @@ export async function POST(request: Request) {
   await reconcileClaims();
   return NextResponse.json({ ok: true });
 }
+
+export const GET = handle;
+export const POST = handle;

@@ -23,6 +23,13 @@ export const translations: Record<Locale, Dictionary> = {
     "nav.notifications": "Notifications",
     "nav.language": "Language",
     "nav.noUsersFound": "No users found.",
+    "nav.friends": "Friends",
+
+    "friends.title": "Friends & family",
+    "friends.followers": "Followers",
+    "friends.following": "Following",
+    "friends.noFollowers": "No one's following you yet.",
+    "friends.noFollowing": "You're not following anyone yet.",
 
     "home.heading": "Get your list now",
     "home.subheading": "Your gifts. No duplicates. No spoilers.",
@@ -148,6 +155,13 @@ export const translations: Record<Locale, Dictionary> = {
     "nav.notifications": "الإشعارات",
     "nav.language": "اللغة",
     "nav.noUsersFound": "لم يتم العثور على مستخدمين.",
+    "nav.friends": "الأصدقاء",
+
+    "friends.title": "الأصدقاء والعائلة",
+    "friends.followers": "المتابِعون",
+    "friends.following": "المتابَعون",
+    "friends.noFollowers": "لا يتابعك أحد بعد.",
+    "friends.noFollowing": "أنت لا تتابع أحدًا بعد.",
 
     "home.heading": "احصل على قائمتك الآن",
     "home.subheading": "هداياك. بلا تكرار. بلا حرق للمفاجأة.",
@@ -272,6 +286,13 @@ export const translations: Record<Locale, Dictionary> = {
     "nav.notifications": "התראות",
     "nav.language": "שפה",
     "nav.noUsersFound": "לא נמצאו משתמשים.",
+    "nav.friends": "חברים",
+
+    "friends.title": "חברים ומשפחה",
+    "friends.followers": "עוקבים",
+    "friends.following": "נעקבים",
+    "friends.noFollowers": "עדיין אין עוקבים.",
+    "friends.noFollowing": "עדיין לא עוקבים אחרי מישהו.",
 
     "home.heading": "קבלו את הרשימה שלכם עכשיו",
     "home.subheading": "המתנות שלך. בלי כפילויות. בלי ספוילרים.",
