@@ -60,7 +60,16 @@
       "Bash(git remote *)",
       "Bash(git push *)",
       "mcp__mcp-registry__list_connectors",
-      "mcp__mcp-registry__search_mcp_registry"
+      "mcp__mcp-registry__search_mcp_registry",
+      "mcp__claude-in-chrome__list_connected_browsers",
+      "mcp__claude-in-chrome__tabs_context_mcp",
+      "mcp__claude-in-chrome__tabs_create_mcp",
+      "Bash(npx neonctl@latest init)",
+      "Bash(start https://console.neon.tech/signup)",
+      "Bash(CI= npx -y neonctl@latest auth)",
+      "Bash(npx -y neonctl@latest projects list)",
+      "Bash(npx -y neonctl@latest projects list --org-id org-lively-pond-73596446)",
+      "Bash(npx -y neonctl@latest connection-string --project-id misty-rice-93105982 --org-id org-lively-pond-73596446)"
     ]
   }
 }
